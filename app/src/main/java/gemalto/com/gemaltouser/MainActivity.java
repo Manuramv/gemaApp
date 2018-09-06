@@ -4,6 +4,8 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
@@ -23,12 +25,18 @@ import gemalto.com.gemaltodatalib.dataprocessing.RetrieveData;
 import gemalto.com.gemaltodatalib.networking.response.genderquery.GetGenderQueryInfoResponse;
 import gemalto.com.gemaltodatalib.networking.response.genderquery.UserResult;
 import gemalto.com.gemaltodatalib.serviceimpl.PassGenderDataInterface;
+import gemalto.com.gemaltouser.fragments.QueryFragment;
+import gemalto.com.gemaltouser.fragments.SettingsFragment;
+import gemalto.com.gemaltouser.fragments.StoredUserFragment;
 import retrofit2.Call;
 
 public class MainActivity extends AppCompatActivity  implements NavigationView.OnNavigationItemSelectedListener, GenderCallBack, PassGenderDataInterface {
     AppCompatActivity mActivityObj;
     List<UserResult> str;
     PassGenderDataInterface passGenderDataInterfaceObj;
+    private QueryFragment queryFragment;
+    private StoredUserFragment storedUserFragment;
+    private SettingsFragment settingsFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,6 +46,9 @@ public class MainActivity extends AppCompatActivity  implements NavigationView.O
         setSupportActionBar(toolbar);
         mActivityObj = this;
         passGenderDataInterfaceObj = this;
+        queryFragment = new QueryFragment();
+        storedUserFragment = new StoredUserFragment();
+        settingsFragment = new SettingsFragment();
         //str = (Call<GetGenderQueryInfoResponse>) new ArrayList<>();
         /*gemalto.com.gemaltodatalib.MainActivity mainActivity = new gemalto.com.gemaltodatalib.MainActivity();
         mainActivity.checkConnection();*/
@@ -96,27 +107,6 @@ try {
         }
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.main, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
 
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
@@ -125,11 +115,12 @@ try {
         int id = item.getItemId();
 
         if (id == R.id.nav_setting) {
-            // Handle the camera action
+            navigateToFragment(settingsFragment,false);
         } else if (id == R.id.nav_queryuser) {
+            navigateToFragment(queryFragment,false);
 
         } else if (id == R.id.nav_view_stored_user) {
-
+            navigateToFragment(storedUserFragment,false);
         } else if (id == R.id.nav_exit) {
 
         }
@@ -154,4 +145,20 @@ try {
     public void onReceivingDataFromlib(List<UserResult> list) {
         Log.d("tag","on receiving data from lib=========:"+list.get(0).getPhone());
     }
+
+
+
+    public void navigateToFragment(Fragment frag, boolean addtostack) {
+
+        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+        ft.replace(R.id.fragmentcontainer, frag); // f1_container is your FrameLayout container
+        ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
+        if (addtostack) {
+            ft.addToBackStack(null);
+        }
+
+        invalidateOptionsMenu();
+        ft.commit();
+    }
+
 }
