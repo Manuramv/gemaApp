@@ -12,7 +12,7 @@ import gemalto.com.gemaltouser.R;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class SettingsFragment extends android.support.v4.app.Fragment {
+public class SettingsFragment extends CustomBaseFragments {
 
 
     public SettingsFragment() {

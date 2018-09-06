@@ -1,4 +1,4 @@
-package gemalto.com.gemaltouser;
+package gemalto.com.gemaltouser.activities;
 
 import android.os.Bundle;
 import android.os.Handler;
@@ -25,12 +25,13 @@ import gemalto.com.gemaltodatalib.dataprocessing.RetrieveData;
 import gemalto.com.gemaltodatalib.networking.response.genderquery.GetGenderQueryInfoResponse;
 import gemalto.com.gemaltodatalib.networking.response.genderquery.UserResult;
 import gemalto.com.gemaltodatalib.serviceimpl.PassGenderDataInterface;
+import gemalto.com.gemaltouser.R;
 import gemalto.com.gemaltouser.fragments.QueryFragment;
 import gemalto.com.gemaltouser.fragments.SettingsFragment;
 import gemalto.com.gemaltouser.fragments.StoredUserFragment;
 import retrofit2.Call;
 
-public class MainActivity extends AppCompatActivity  implements NavigationView.OnNavigationItemSelectedListener, GenderCallBack, PassGenderDataInterface {
+public class MainActivity extends CustomBaseActivity  implements NavigationView.OnNavigationItemSelectedListener, GenderCallBack, PassGenderDataInterface {
     AppCompatActivity mActivityObj;
     List<UserResult> str;
     PassGenderDataInterface passGenderDataInterfaceObj;

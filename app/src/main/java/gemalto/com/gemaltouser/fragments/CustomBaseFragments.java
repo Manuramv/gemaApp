@@ -12,10 +12,10 @@ import gemalto.com.gemaltouser.R;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class StoredUserFragment extends CustomBaseFragments {
+public class CustomBaseFragments extends android.support.v4.app.Fragment {
 
 
-    public StoredUserFragment() {
+    public CustomBaseFragments() {
         // Required empty public constructor
     }
 
@@ -24,7 +24,7 @@ public class StoredUserFragment extends CustomBaseFragments {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_stored_user, container, false);
+        return inflater.inflate(R.layout.fragment_custom_base_fragments, container, false);
     }
 
 }

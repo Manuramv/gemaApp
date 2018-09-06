@@ -17,7 +17,7 @@ import gemalto.com.gemaltouser.R;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class QueryFragment extends android.support.v4.app.Fragment implements AdapterView.OnItemSelectedListener, View.OnClickListener {
+public class QueryFragment extends CustomBaseFragments implements AdapterView.OnItemSelectedListener, View.OnClickListener {
     private Spinner spinner;
     private static final String[] paths = {"Female","Male"};
     private View mFragmentView;
