@@ -20,21 +20,14 @@ import android.view.MenuItem;
 import java.util.ArrayList;
 import java.util.List;
 
-import gemalto.com.gemaltodatalib.GenderCallBack;
-import gemalto.com.gemaltodatalib.dataprocessing.RetrieveData;
-import gemalto.com.gemaltodatalib.networking.response.genderquery.GetGenderQueryInfoResponse;
 import gemalto.com.gemaltodatalib.networking.response.genderquery.UserResult;
-import gemalto.com.gemaltodatalib.serviceimpl.PassGenderDataInterface;
 import gemalto.com.gemaltouser.R;
 import gemalto.com.gemaltouser.fragments.QueryFragment;
 import gemalto.com.gemaltouser.fragments.SettingsFragment;
 import gemalto.com.gemaltouser.fragments.StoredUserFragment;
-import retrofit2.Call;
 
-public class MainActivity extends CustomBaseActivity  implements NavigationView.OnNavigationItemSelectedListener, GenderCallBack, PassGenderDataInterface {
+public class MainActivity extends CustomBaseActivity  implements NavigationView.OnNavigationItemSelectedListener {
     AppCompatActivity mActivityObj;
-    List<UserResult> str;
-    PassGenderDataInterface passGenderDataInterfaceObj;
     private QueryFragment queryFragment;
     private StoredUserFragment storedUserFragment;
     private SettingsFragment settingsFragment;
@@ -46,47 +39,9 @@ public class MainActivity extends CustomBaseActivity  implements NavigationView.
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         mActivityObj = this;
-        passGenderDataInterfaceObj = this;
         queryFragment = new QueryFragment();
         storedUserFragment = new StoredUserFragment();
         settingsFragment = new SettingsFragment();
-        //str = (Call<GetGenderQueryInfoResponse>) new ArrayList<>();
-        /*gemalto.com.gemaltodatalib.MainActivity mainActivity = new gemalto.com.gemaltodatalib.MainActivity();
-        mainActivity.checkConnection();*/
-
-        RetrieveData retrieveDataObj = new RetrieveData(mActivityObj);
-       /* //List<UserResult> str =   retrieveDataObj.initiateGenderQuery("female");
-        PassGenderDataInterface passGenderDataInterface = new PassGenderDataInterface() {
-            @Override
-            public void onReceivingDataFromlib(List<UserResult> list) {
-                Log.d("tag","on receiving data from lib::"+list.get(0).getPhone());
-            }
-        };*/
-
-
-
-        str = retrieveDataObj.initiateGenderQuery("female",this);
-        //Log.d("tag","Size of s=="+s.toString());
-try {
-    final Handler handler = new Handler();
-    handler.postDelayed(new Runnable() {
-        @Override
-        public void run() {
-            // Do something after 5s = 5000ms
-            // Log.d("tag","Size of s in app=="+str. get(0).getGender().toString()+"postal code=="+str.get(0).getLocation().getPostcode());
-            try{
-                Log.d("tag", "Size of s in app==" + str.toString());
-            }
-            catch (Exception e){
-
-            }
-
-
-        }
-    }, 5000);
-} catch (Exception e){
-    Log.d("tag", "Exception:::"+e.toString());
-}
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -130,23 +85,6 @@ try {
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
-
-    @Override
-    public List<UserResult> onSuccess(List<UserResult> list) {
-        Log.d("TAG","UserList:::===="+list.toString());
-        return null;
-    }
-
-    @Override
-    public void onError(Throwable throwable) {
-
-    }
-
-    @Override
-    public void onReceivingDataFromlib(List<UserResult> list) {
-        Log.d("tag","on receiving data from lib=========:"+list.get(0).getPhone());
-    }
-
 
 
     public void navigateToFragment(Fragment frag, boolean addtostack) {
