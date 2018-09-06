@@ -35,6 +35,7 @@ public class QueryFragment extends CustomBaseFragments implements AdapterView.On
     private AppCompatActivity mActivityObj;
     PassGenderDataInterface passGenderDataInterfaceObj;
     CommonUtilities commonUtilities;
+    private String selectedGender;
 
     public QueryFragment() {
         // Required empty public constructor
@@ -64,7 +65,17 @@ public class QueryFragment extends CustomBaseFragments implements AdapterView.On
     }
 
     @Override
-    public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+    public void onItemSelected(AdapterView<?> adapterView, View view, int position, long l) {
+        switch (position){
+            case 1:
+                selectedGender = "female";
+                break;
+
+            case 2:
+                selectedGender = "male";
+                break;
+
+        }
 
     }
 
@@ -86,7 +97,7 @@ public class QueryFragment extends CustomBaseFragments implements AdapterView.On
 
     private void proceedWithDataQuery() {
         RetrieveData retrieveDataObj = new RetrieveData(mActivityObj);
-        retrieveDataObj.initiateGenderQuery("female",passGenderDataInterfaceObj);
+        retrieveDataObj.initiateGenderQuery(selectedGender,passGenderDataInterfaceObj);
         commonUtilities.showBusyIndicator(mActivityObj);
 
 
