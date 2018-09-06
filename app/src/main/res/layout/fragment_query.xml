@@ -1,13 +1,114 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="gemalto.com.gemaltouser.fragments.QueryFragment">
+    tools:context="gemalto.com.gemaltouser.fragments.QueryFragment"
+    android:orientation="vertical">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <!--starting of gender area-->
+   <LinearLayout
+       android:layout_width="match_parent"
+       android:layout_height="wrap_content"
+       android:weightSum="2"
+       android:layout_marginTop="24dp"
+       android:id="@+id/genderarea"
+       android:orientation="horizontal">
+
+       <TextView
+           android:layout_width="0dp"
+           android:layout_height="wrap_content"
+           android:layout_weight="1"
+           android:layout_gravity="right"
+           android:gravity="right"
+           android:layout_marginRight="8dp"
+           android:text="Gender"/>
+
+       <Spinner
+           android:layout_width="0dp"
+           android:layout_weight="1"
+           android:id="@+id/gender_dropdown"
+           android:layout_height="wrap_content"
+           />
+
+   </LinearLayout>
+
+    <!--ending of gender area-->
+
+    <!--starting of seed area-->
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="Query Fragment" />
+        android:layout_height="wrap_content"
+        android:weightSum="2"
+        android:id="@+id/seed_area"
+        android:layout_margin="8dp"
+        android:orientation="horizontal">
 
-</FrameLayout>
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+
+            android:layout_gravity="right"
+            android:gravity="center|right"
+            android:layout_marginRight="8dp"
+            android:text="User ID (aka Seed)"/>
+
+        <EditText
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:id="@+id/et_seed"
+            android:inputType="number"
+            android:layout_height="wrap_content"
+            android:background="@drawable/edittextbackground"
+            android:hint="User Id"/>
+
+    </LinearLayout>
+
+    <!--ending of seed area-->
+
+    <!--starting of user count area-->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:weightSum="2"
+        android:id="@+id/multipleuser_area"
+        android:layout_margin="8dp"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:layout_gravity="right"
+            android:gravity="center|right"
+            android:layout_marginRight="8dp"
+            android:text="Multiple user"/>
+
+        <EditText
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:id="@+id/et_multiuser"
+            android:layout_height="wrap_content"
+            android:inputType="number"
+            android:background="@drawable/edittextbackground"
+            android:hint="Multi user"/>
+
+    </LinearLayout>
+
+    <!--ending of multi user area-->
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/btn_query"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="48dp"
+        android:layout_alignParentBottom="true"
+        android:text="Query"/>
+
+    </RelativeLayout>
+
+</LinearLayout>
