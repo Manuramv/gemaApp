@@ -23,12 +23,15 @@ import org.json.JSONObject;
 
 import java.util.List;
 
+import gemalto.com.gemaltodatalib.callbackinterface.PassMultipleUserIdInterface;
 import gemalto.com.gemaltodatalib.callbackinterface.PassUserIdInterface;
 import gemalto.com.gemaltodatalib.dataprocessing.RetrieveData;
+import gemalto.com.gemaltodatalib.dataprocessing.RetrieveMultipleUserData;
 import gemalto.com.gemaltodatalib.dataprocessing.RetrieveUserIdData;
 import gemalto.com.gemaltodatalib.networking.response.genderquery.UserResult;
 import gemalto.com.gemaltodatalib.serviceimpl.PassGenderDataInterface;
 import gemalto.com.gemaltouser.R;
+import gemalto.com.gemaltouser.activities.UserDetailListActivity;
 import gemalto.com.gemaltouser.activities.UserDetailsActivity;
 import gemalto.com.gemaltouser.util.CommonUtilities;
 import gemalto.com.gemaltouser.util.CustomWatcher;
@@ -37,7 +40,7 @@ import gemalto.com.gemaltouser.util.GemAppConstants;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class QueryFragment extends CustomBaseFragments implements AdapterView.OnItemSelectedListener, View.OnClickListener, PassGenderDataInterface, PassUserIdInterface {
+public class QueryFragment extends CustomBaseFragments implements AdapterView.OnItemSelectedListener, View.OnClickListener, PassGenderDataInterface, PassUserIdInterface, PassMultipleUserIdInterface {
     private Spinner spinner;
     private static final String[] paths = {"Select","Female","Male"};
     private View mFragmentView;
@@ -46,6 +49,7 @@ public class QueryFragment extends CustomBaseFragments implements AdapterView.On
     private AppCompatActivity mActivityObj;
     PassGenderDataInterface passGenderDataInterfaceObj;
     private PassUserIdInterface passUserIDInterfaceObj;
+    private PassMultipleUserIdInterface passMultipleUserIdInterfaceObj;
     CommonUtilities commonUtilities;
     private String selectedGender;
     private QueryUserDetailsFragment userDetailsFragment;
@@ -63,6 +67,7 @@ public class QueryFragment extends CustomBaseFragments implements AdapterView.On
          mActivityObj = (AppCompatActivity) this.getActivity();
          passGenderDataInterfaceObj = this;
         passUserIDInterfaceObj = this;
+        passMultipleUserIdInterfaceObj = this;
         commonUtilities = new CommonUtilities();
         userDetailsFragment = new QueryUserDetailsFragment();
 
@@ -174,10 +179,9 @@ public class QueryFragment extends CustomBaseFragments implements AdapterView.On
             RetrieveUserIdData retrieveUserIdDataObj = new RetrieveUserIdData(mActivityObj);
             retrieveUserIdDataObj.initiateUserIDQuery(etSeed.getText().toString(),passUserIDInterfaceObj);
             commonUtilities.showBusyIndicator(mActivityObj);
-
-//multiuser selected
         } else {
-
+            RetrieveMultipleUserData retrieveMultipleUserDataObj = new RetrieveMultipleUserData(mActivityObj);
+            retrieveMultipleUserDataObj.initiateMultipleUserQuery(etMultiplUser.getText().toString(),passMultipleUserIdInterfaceObj);
         }
 
     }
@@ -232,5 +236,13 @@ public class QueryFragment extends CustomBaseFragments implements AdapterView.On
         Log.d("TAG","Userid call back in fragment::"+list.get(0).getPhone());
         JSONObject obj = generateJsonObj(list);
         navigateToUserDetail(obj,"comingFromSeed");
+    }
+
+    @Override
+    public void onReceivingMultipleUserDataFromlib(List<UserResult> list) {
+        Log.d("TAG","Multiple user call back in fragment::"+list.size());
+        Intent intent = new Intent(mActivityObj, UserDetailListActivity.class);
+        intent.putExtra("userdata","mmm");
+        startActivity(intent);
     }
 }

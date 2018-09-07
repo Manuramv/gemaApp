@@ -20,7 +20,12 @@
             </intent-filter>
         </activity>
         <activity android:name=".activities.CustomBaseActivity" />
-        <activity android:name=".activities.UserDetailsActivity"
+        <activity
+            android:name=".activities.UserDetailsActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".activities.UserDetailListActivity"
+            android:label="@string/title_activity_user_detail_list"
             android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
