@@ -1,9 +1,11 @@
 package gemalto.com.gemaltouser.fragments;
 
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.os.Handler;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -21,6 +23,7 @@ import gemalto.com.gemaltodatalib.dataprocessing.RetrieveData;
 import gemalto.com.gemaltodatalib.networking.response.genderquery.UserResult;
 import gemalto.com.gemaltodatalib.serviceimpl.PassGenderDataInterface;
 import gemalto.com.gemaltouser.R;
+import gemalto.com.gemaltouser.activities.UserDetailsActivity;
 import gemalto.com.gemaltouser.util.CommonUtilities;
 
 /**
@@ -36,6 +39,7 @@ public class QueryFragment extends CustomBaseFragments implements AdapterView.On
     PassGenderDataInterface passGenderDataInterfaceObj;
     CommonUtilities commonUtilities;
     private String selectedGender;
+    private QueryUserDetailsFragment userDetailsFragment;
 
     public QueryFragment() {
         // Required empty public constructor
@@ -49,6 +53,7 @@ public class QueryFragment extends CustomBaseFragments implements AdapterView.On
          mActivityObj = (AppCompatActivity) this.getActivity();
          passGenderDataInterfaceObj = this;
         commonUtilities = new CommonUtilities();
+        userDetailsFragment = new QueryUserDetailsFragment();
 
         spinner = (Spinner)mFragmentView.findViewById(R.id.gender_dropdown);
         etSeed = (EditText) mFragmentView.findViewById(R.id.et_seed);
@@ -107,5 +112,25 @@ public class QueryFragment extends CustomBaseFragments implements AdapterView.On
     public void onReceivingDataFromlib(List<UserResult> list) {
         Log.d("tag","on receiving data from lib in query fragment=========:"+list.get(0).getPhone());
         commonUtilities.removeBusyIndicator(mActivityObj);
+        //navigateToFragment(userDetailsFragment, true);
+        navigateToUserDetail();
+    }
+
+
+
+    public void navigateToFragment(android.support.v4.app.Fragment frag, boolean addtostack) {
+
+        FragmentTransaction ft = mActivityObj.getSupportFragmentManager().beginTransaction();
+        ft.replace(R.id.fragmentcontainer, frag); // f1_container is your FrameLayout container
+        ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
+        if (addtostack) {
+            ft.addToBackStack(null);
+        }
+        ft.commit();
+    }
+
+    public void navigateToUserDetail(){
+        Intent intent = new Intent(mActivityObj, UserDetailsActivity.class);
+        startActivity(intent);
     }
 }

@@ -1,0 +1,145 @@
+<TableLayout android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/my_drawable"
+    android:padding="5dp"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <TableRow
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" >
+
+        <TextView
+            android:id="@+id/home"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:backgroundTint="@color/colorAccent"
+            android:background="@drawable/my_drawable"
+            android:gravity="center"
+            android:padding="15dip"
+            android:text="USer ID" />
+
+        <TextView
+            android:id="@+id/txt_userID"
+            android:layout_width="0dp"
+            android:backgroundTint="@color/colorAccent"
+            android:layout_weight="1"
+            android:background="@drawable/my_drawable"
+            android:gravity="center"
+            android:padding="15dip"
+            android:hint="Number of Visits" />
+    </TableRow>
+
+    <TableRow
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" >
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:background="@drawable/my_drawable"
+            android:gravity="center"
+            android:padding="15dip"
+            android:text="Name" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:id="@+id/txt_name"
+            android:background="@drawable/my_drawable"
+            android:gravity="center"
+            android:padding="15dip"
+            android:text="1" />
+    </TableRow>
+
+    <TableRow
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" >
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:background="@drawable/my_drawable"
+            android:gravity="center"
+            android:padding="15dip"
+            android:text="Gender" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:id="@+id/txt_gender"
+            android:background="@drawable/my_drawable"
+            android:gravity="center"
+            android:padding="15dip"
+            android:text="" />
+    </TableRow>
+
+
+    <TableRow
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" >
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:background="@drawable/my_drawable"
+            android:gravity="center"
+            android:padding="15dip"
+            android:text="Age" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:id="@+id/txt_age"
+            android:background="@drawable/my_drawable"
+            android:gravity="center"
+            android:padding="15dip"
+            android:text="" />
+    </TableRow>
+
+
+    <TableRow
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" >
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:background="@drawable/my_drawable"
+            android:gravity="center"
+            android:padding="15dip"
+            android:text="DOB" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:id="@+id/txt_dob"
+            android:background="@drawable/my_drawable"
+            android:gravity="center"
+            android:padding="15dip"
+            android:text="" />
+    </TableRow>
+
+    <TableRow
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" >
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:background="@drawable/my_drawable"
+            android:gravity="center"
+            android:padding="15dip"
+            android:text="Email" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:id="@+id/txt_email"
+            android:background="@drawable/my_drawable"
+            android:gravity="center"
+            android:padding="15dip"
+            android:text="" />
+    </TableRow>
+
+
+</TableLayout>
