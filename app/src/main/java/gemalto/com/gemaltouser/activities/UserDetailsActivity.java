@@ -3,6 +3,7 @@ package gemalto.com.gemaltouser.activities;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.Button;
 import android.widget.TextView;
 
 import org.json.JSONException;
@@ -14,6 +15,7 @@ public class UserDetailsActivity extends CustomBaseActivity {
 
     private JSONObject json_object;
     TextView txtUserId,txtUsername,txtGender,txtAge,txtDob,txtEmail;
+    private Button btnStoreDelete;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,6 +28,7 @@ public class UserDetailsActivity extends CustomBaseActivity {
         txtAge = (TextView)findViewById(R.id.txt_age);
         txtDob = (TextView)findViewById(R.id.txt_dob);
         txtEmail = (TextView)findViewById(R.id.txt_email);
+        btnStoreDelete = (Button) findViewById(R.id.btn_store_delete);
 
         try {
             json_object = new JSONObject(getIntent().getStringExtra("userdata"));
