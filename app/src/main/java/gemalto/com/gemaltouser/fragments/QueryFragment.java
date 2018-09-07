@@ -19,6 +19,9 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.List;
 
 import gemalto.com.gemaltodatalib.dataprocessing.RetrieveData;
@@ -28,6 +31,7 @@ import gemalto.com.gemaltouser.R;
 import gemalto.com.gemaltouser.activities.UserDetailsActivity;
 import gemalto.com.gemaltouser.util.CommonUtilities;
 import gemalto.com.gemaltouser.util.CustomWatcher;
+import gemalto.com.gemaltouser.util.UserDetailDto;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -146,8 +150,6 @@ public class QueryFragment extends CustomBaseFragments implements AdapterView.On
         RetrieveData retrieveDataObj = new RetrieveData(mActivityObj);
         retrieveDataObj.initiateGenderQuery(selectedGender,passGenderDataInterfaceObj);
         commonUtilities.showBusyIndicator(mActivityObj);
-
-
     }
 
     @Override
@@ -155,7 +157,19 @@ public class QueryFragment extends CustomBaseFragments implements AdapterView.On
         Log.d("tag","on receiving data from lib in query fragment=========:"+list.get(0).getPhone());
         commonUtilities.removeBusyIndicator(mActivityObj);
         //navigateToFragment(userDetailsFragment, true);
-        navigateToUserDetail();
+        JSONObject obj = new JSONObject();
+        try {
+            obj.put("id", list.get(0).getId().getValue().toString());
+            obj.put("name", list.get(0).getName().getFirst()+" "+ list.get(0).getName().getLast());
+            obj.put("gender", list.get(0).getGender().toString());
+            obj.put("age", list.get(0).getDob().getAge().toString());
+            obj.put("dob", list.get(0).getDob().getDate().toString());
+            obj.put("email", list.get(0).getEmail().toString());
+        } catch (JSONException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        navigateToUserDetail(obj);
     }
 
 
@@ -171,8 +185,9 @@ public class QueryFragment extends CustomBaseFragments implements AdapterView.On
         ft.commit();
     }
 
-    public void navigateToUserDetail(){
+    public void navigateToUserDetail(JSONObject obj){
         Intent intent = new Intent(mActivityObj, UserDetailsActivity.class);
+        intent.putExtra("userdata",obj.toString());
         startActivity(intent);
     }
 
