@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.app.Fragment;
-import android.os.Handler;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -24,7 +23,9 @@ import org.json.JSONObject;
 
 import java.util.List;
 
+import gemalto.com.gemaltodatalib.callbackinterface.PassUserIdInterface;
 import gemalto.com.gemaltodatalib.dataprocessing.RetrieveData;
+import gemalto.com.gemaltodatalib.dataprocessing.RetrieveUserIdData;
 import gemalto.com.gemaltodatalib.networking.response.genderquery.UserResult;
 import gemalto.com.gemaltodatalib.serviceimpl.PassGenderDataInterface;
 import gemalto.com.gemaltouser.R;
@@ -32,12 +33,11 @@ import gemalto.com.gemaltouser.activities.UserDetailsActivity;
 import gemalto.com.gemaltouser.util.CommonUtilities;
 import gemalto.com.gemaltouser.util.CustomWatcher;
 import gemalto.com.gemaltouser.util.GemAppConstants;
-import gemalto.com.gemaltouser.util.UserDetailDto;
 
 /**
  * A simple {@link Fragment} subclass.
  */
-public class QueryFragment extends CustomBaseFragments implements AdapterView.OnItemSelectedListener, View.OnClickListener, PassGenderDataInterface {
+public class QueryFragment extends CustomBaseFragments implements AdapterView.OnItemSelectedListener, View.OnClickListener, PassGenderDataInterface, PassUserIdInterface {
     private Spinner spinner;
     private static final String[] paths = {"Select","Female","Male"};
     private View mFragmentView;
@@ -45,9 +45,11 @@ public class QueryFragment extends CustomBaseFragments implements AdapterView.On
     private Button btnquery;
     private AppCompatActivity mActivityObj;
     PassGenderDataInterface passGenderDataInterfaceObj;
+    private PassUserIdInterface passUserIDInterfaceObj;
     CommonUtilities commonUtilities;
     private String selectedGender;
     private QueryUserDetailsFragment userDetailsFragment;
+
 
     public QueryFragment() {
         // Required empty public constructor
@@ -60,6 +62,7 @@ public class QueryFragment extends CustomBaseFragments implements AdapterView.On
          mFragmentView = inflater.inflate(R.layout.fragment_query, container, false);
          mActivityObj = (AppCompatActivity) this.getActivity();
          passGenderDataInterfaceObj = this;
+        passUserIDInterfaceObj = this;
         commonUtilities = new CommonUtilities();
         userDetailsFragment = new QueryUserDetailsFragment();
 
@@ -167,6 +170,11 @@ public class QueryFragment extends CustomBaseFragments implements AdapterView.On
             retrieveDataObj.initiateGenderQuery(selectedGender,passGenderDataInterfaceObj);
             commonUtilities.showBusyIndicator(mActivityObj);
         } else if(GemAppConstants.isUserIDSelected){
+
+            RetrieveUserIdData retrieveUserIdDataObj = new RetrieveUserIdData(mActivityObj);
+            retrieveUserIdDataObj.initiateUserIDQuery(etSeed.getText().toString(),passUserIDInterfaceObj);
+            commonUtilities.showBusyIndicator(mActivityObj);
+
 //multiuser selected
         } else {
 
@@ -179,6 +187,11 @@ public class QueryFragment extends CustomBaseFragments implements AdapterView.On
         Log.d("tag","on receiving data from lib in query fragment=========:"+list.get(0).getPhone());
         commonUtilities.removeBusyIndicator(mActivityObj);
         //navigateToFragment(userDetailsFragment, true);
+         JSONObject obj = generateJsonObj(list);
+        navigateToUserDetail(obj, "comingFromGender");
+    }
+
+    private JSONObject generateJsonObj(List<UserResult> list) {
         JSONObject obj = new JSONObject();
         try {
             obj.put("id", list.get(0).getId().getValue().toString());
@@ -191,9 +204,8 @@ public class QueryFragment extends CustomBaseFragments implements AdapterView.On
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
-        navigateToUserDetail(obj);
+        return obj;
     }
-
 
 
     public void navigateToFragment(android.support.v4.app.Fragment frag, boolean addtostack) {
@@ -207,14 +219,18 @@ public class QueryFragment extends CustomBaseFragments implements AdapterView.On
         ft.commit();
     }
 
-    public void navigateToUserDetail(JSONObject obj){
+    public void navigateToUserDetail(JSONObject obj, String comingFromSeed){
         Intent intent = new Intent(mActivityObj, UserDetailsActivity.class);
         intent.putExtra("userdata",obj.toString());
         startActivity(intent);
     }
 
 
-
-
-
+    @Override
+    public void onReceivingUserIdDataFromlib(List<UserResult> list) {
+        commonUtilities.removeBusyIndicator(mActivityObj);
+        Log.d("TAG","Userid call back in fragment::"+list.get(0).getPhone());
+        JSONObject obj = generateJsonObj(list);
+        navigateToUserDetail(obj,"comingFromSeed");
+    }
 }
