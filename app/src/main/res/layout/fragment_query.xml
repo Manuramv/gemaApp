@@ -23,7 +23,7 @@
            android:layout_marginRight="8dp"
            android:text="Gender"/>
 
-       <Spinner
+       <android.support.v7.widget.AppCompatSpinner
            android:layout_width="0dp"
            android:layout_weight="1"
            android:id="@+id/gender_dropdown"
@@ -96,6 +96,16 @@
     </LinearLayout>
 
     <!--ending of multi user area-->
+
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textAlignment="center"
+        android:layout_marginTop="16dp"
+        android:textSize="18sp"
+        android:textColor="@color/colorAccent"
+        android:text="Input only one item to query"/>
 
     <RelativeLayout
         android:layout_width="match_parent"

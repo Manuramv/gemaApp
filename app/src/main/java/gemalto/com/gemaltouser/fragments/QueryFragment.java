@@ -2,6 +2,7 @@ package gemalto.com.gemaltouser.fragments;
 
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.os.Handler;
@@ -16,6 +17,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 import java.util.List;
 
@@ -25,13 +27,14 @@ import gemalto.com.gemaltodatalib.serviceimpl.PassGenderDataInterface;
 import gemalto.com.gemaltouser.R;
 import gemalto.com.gemaltouser.activities.UserDetailsActivity;
 import gemalto.com.gemaltouser.util.CommonUtilities;
+import gemalto.com.gemaltouser.util.CustomWatcher;
 
 /**
  * A simple {@link Fragment} subclass.
  */
 public class QueryFragment extends CustomBaseFragments implements AdapterView.OnItemSelectedListener, View.OnClickListener, PassGenderDataInterface {
     private Spinner spinner;
-    private static final String[] paths = {"Female","Male"};
+    private static final String[] paths = {"Select","Female","Male"};
     private View mFragmentView;
     private EditText etSeed,etMultiplUser;
     private Button btnquery;
@@ -60,7 +63,39 @@ public class QueryFragment extends CustomBaseFragments implements AdapterView.On
         etMultiplUser = (EditText) mFragmentView.findViewById(R.id.et_multiuser);
         btnquery = (Button) mFragmentView.findViewById(R.id.btn_query);
         btnquery.setOnClickListener(this);
-        ArrayAdapter<String>adapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_item,paths);
+
+        etSeed.addTextChangedListener(new CustomWatcher(etSeed,etMultiplUser,spinner));
+        etMultiplUser.addTextChangedListener(new CustomWatcher(etMultiplUser,etSeed,spinner));
+
+        ArrayAdapter<String>adapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_item,paths){
+            @Override
+            public boolean isEnabled(int position){
+                if(position == 0)
+                {
+                    // Disable the first item from Spinner
+                    // First item will be use for hint
+                    return false;
+                }
+                else
+                {
+                    return true;
+                }
+            }
+            @Override
+            public View getDropDownView(int position, View convertView,
+                                        ViewGroup parent) {
+                View view = super.getDropDownView(position, convertView, parent);
+                TextView tv = (TextView) view;
+                if(position == 0){
+                    // Set the hint text color gray
+                    tv.setTextColor(Color.GRAY);
+                }
+                else {
+                    tv.setTextColor(Color.BLACK);
+                }
+                return view;
+            }
+        };
 
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(adapter);
@@ -69,16 +104,23 @@ public class QueryFragment extends CustomBaseFragments implements AdapterView.On
         return mFragmentView;
     }
 
+
+
     @Override
     public void onItemSelected(AdapterView<?> adapterView, View view, int position, long l) {
         switch (position){
             case 1:
                 selectedGender = "female";
+                etSeed.setText("");
+                etMultiplUser.setText("");
                 break;
 
             case 2:
                 selectedGender = "male";
+                etSeed.setText("");
+                etMultiplUser.setText("");
                 break;
+
 
         }
 
@@ -133,4 +175,9 @@ public class QueryFragment extends CustomBaseFragments implements AdapterView.On
         Intent intent = new Intent(mActivityObj, UserDetailsActivity.class);
         startActivity(intent);
     }
+
+
+
+
+
 }
