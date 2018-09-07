@@ -42,6 +42,7 @@ public class MainActivity extends CustomBaseActivity  implements NavigationView.
         queryFragment = new QueryFragment();
         storedUserFragment = new StoredUserFragment();
         settingsFragment = new SettingsFragment();
+        navigateToFragment(queryFragment,false);
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(

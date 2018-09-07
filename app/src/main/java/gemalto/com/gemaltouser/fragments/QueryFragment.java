@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.app.Fragment;
+import android.os.Parcelable;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -21,6 +22,7 @@ import android.widget.TextView;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import gemalto.com.gemaltodatalib.callbackinterface.PassMultipleUserIdInterface;
@@ -182,6 +184,7 @@ public class QueryFragment extends CustomBaseFragments implements AdapterView.On
         } else {
             RetrieveMultipleUserData retrieveMultipleUserDataObj = new RetrieveMultipleUserData(mActivityObj);
             retrieveMultipleUserDataObj.initiateMultipleUserQuery(etMultiplUser.getText().toString(),passMultipleUserIdInterfaceObj);
+            commonUtilities.showBusyIndicator(mActivityObj);
         }
 
     }
@@ -198,7 +201,7 @@ public class QueryFragment extends CustomBaseFragments implements AdapterView.On
     private JSONObject generateJsonObj(List<UserResult> list) {
         JSONObject obj = new JSONObject();
         try {
-            obj.put("id", list.get(0).getId().getValue().toString());
+            obj.put("id", list.get(0).getId().getValue());
             obj.put("name", list.get(0).getName().getFirst()+" "+ list.get(0).getName().getLast());
             obj.put("gender", list.get(0).getGender().toString());
             obj.put("age", list.get(0).getDob().getAge().toString());
@@ -239,10 +242,14 @@ public class QueryFragment extends CustomBaseFragments implements AdapterView.On
     }
 
     @Override
-    public void onReceivingMultipleUserDataFromlib(List<UserResult> list) {
+    public void onReceivingMultipleUserDataFromlib(ArrayList<UserResult> list) {
+        commonUtilities.removeBusyIndicator(mActivityObj);
         Log.d("TAG","Multiple user call back in fragment::"+list.size());
         Intent intent = new Intent(mActivityObj, UserDetailListActivity.class);
-        intent.putExtra("userdata","mmm");
+        //intent.putSerializableExtra("songs", songs);
+       // Bundle bundle = new Bundle();
+        intent.putExtra("myArrayListKey",  list);
+        //intent.putExtra("myBundle", bundle);
         startActivity(intent);
     }
 }
