@@ -31,6 +31,7 @@ import gemalto.com.gemaltouser.R;
 import gemalto.com.gemaltouser.activities.UserDetailsActivity;
 import gemalto.com.gemaltouser.util.CommonUtilities;
 import gemalto.com.gemaltouser.util.CustomWatcher;
+import gemalto.com.gemaltouser.util.GemAppConstants;
 import gemalto.com.gemaltouser.util.UserDetailDto;
 
 /**
@@ -68,8 +69,8 @@ public class QueryFragment extends CustomBaseFragments implements AdapterView.On
         btnquery = (Button) mFragmentView.findViewById(R.id.btn_query);
         btnquery.setOnClickListener(this);
 
-        etSeed.addTextChangedListener(new CustomWatcher(etSeed,etMultiplUser,spinner));
-        etMultiplUser.addTextChangedListener(new CustomWatcher(etMultiplUser,etSeed,spinner));
+        etSeed.addTextChangedListener(new CustomWatcher(etSeed,etMultiplUser,spinner, "editingUserIdField"));
+        etMultiplUser.addTextChangedListener(new CustomWatcher(etMultiplUser,etSeed,spinner, "editingMultipleuser"));
 
         ArrayAdapter<String>adapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_item,paths){
             @Override
@@ -90,7 +91,7 @@ public class QueryFragment extends CustomBaseFragments implements AdapterView.On
                                         ViewGroup parent) {
                 View view = super.getDropDownView(position, convertView, parent);
                 TextView tv = (TextView) view;
-                if(position == 0){
+               if(position == 0){
                     // Set the hint text color gray
                     tv.setTextColor(Color.GRAY);
                 }
@@ -112,7 +113,20 @@ public class QueryFragment extends CustomBaseFragments implements AdapterView.On
 
     @Override
     public void onItemSelected(AdapterView<?> adapterView, View view, int position, long l) {
-        switch (position){
+      /*  selectedGender = paths[position];
+        etSeed.setText("");
+        etMultiplUser.setText("");*/
+       // etMultiplUser.setText("");
+
+        selectedGender = paths[position];
+        GemAppConstants.isGenderSelected = true;
+        GemAppConstants.isUserIDSelected = false;
+        GemAppConstants.isMultiUserSelected = true;
+
+        Log.d("tag","Selected item::"+selectedGender);
+
+
+       /* switch (position){
             case 1:
                 selectedGender = "female";
                 etSeed.setText("");
@@ -126,12 +140,13 @@ public class QueryFragment extends CustomBaseFragments implements AdapterView.On
                 break;
 
 
-        }
+        }*/
 
     }
 
     @Override
     public void onNothingSelected(AdapterView<?> adapterView) {
+        GemAppConstants.isGenderSelected = false;
 
     }
 
@@ -147,9 +162,16 @@ public class QueryFragment extends CustomBaseFragments implements AdapterView.On
     }
 
     private void proceedWithDataQuery() {
-        RetrieveData retrieveDataObj = new RetrieveData(mActivityObj);
-        retrieveDataObj.initiateGenderQuery(selectedGender,passGenderDataInterfaceObj);
-        commonUtilities.showBusyIndicator(mActivityObj);
+        if(GemAppConstants.isGenderSelected){
+            RetrieveData retrieveDataObj = new RetrieveData(mActivityObj);
+            retrieveDataObj.initiateGenderQuery(selectedGender,passGenderDataInterfaceObj);
+            commonUtilities.showBusyIndicator(mActivityObj);
+        } else if(GemAppConstants.isUserIDSelected){
+//multiuser selected
+        } else {
+
+        }
+
     }
 
     @Override

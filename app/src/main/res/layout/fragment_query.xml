@@ -23,11 +23,12 @@
            android:layout_marginRight="8dp"
            android:text="Gender"/>
 
-       <android.support.v7.widget.AppCompatSpinner
+       <Spinner
            android:layout_width="0dp"
            android:layout_weight="1"
            android:id="@+id/gender_dropdown"
            android:layout_height="wrap_content"
+           android:spinnerMode="dropdown"
            />
 
    </LinearLayout>
