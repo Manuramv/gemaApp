@@ -1,5 +1,7 @@
 package gemalto.com.gemaltouser.activities;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.design.widget.FloatingActionButton;
@@ -21,6 +23,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import gemalto.com.gemaltodatalib.networking.response.genderquery.UserResult;
+import gemalto.com.gemaltouser.BuildConfig;
 import gemalto.com.gemaltouser.R;
 import gemalto.com.gemaltouser.fragments.QueryFragment;
 import gemalto.com.gemaltouser.fragments.SettingsFragment;
@@ -72,14 +75,17 @@ public class MainActivity extends CustomBaseActivity  implements NavigationView.
         int id = item.getItemId();
 
         if (id == R.id.nav_setting) {
-            navigateToFragment(settingsFragment,false);
+           // navigateToFragment(settingsFragment,false);
+            startActivity(new Intent(android.provider.Settings.ACTION_APPLICATION_DETAILS_SETTINGS, Uri.parse("package:" + BuildConfig.APPLICATION_ID)));
         } else if (id == R.id.nav_queryuser) {
             navigateToFragment(queryFragment,false);
 
         } else if (id == R.id.nav_view_stored_user) {
             navigateToFragment(storedUserFragment,false);
         } else if (id == R.id.nav_exit) {
-
+            //System.exit(0);
+            android.os.Process.killProcess(android.os.Process.myPid());
+            //System.exit(1);
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
