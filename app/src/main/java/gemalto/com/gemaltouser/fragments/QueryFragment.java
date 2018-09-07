@@ -229,6 +229,7 @@ public class QueryFragment extends CustomBaseFragments implements AdapterView.On
     public void navigateToUserDetail(JSONObject obj, String comingFromSeed){
         Intent intent = new Intent(mActivityObj, UserDetailsActivity.class);
         intent.putExtra("userdata",obj.toString());
+        intent.putExtra("comingfrom",comingFromSeed);
         startActivity(intent);
     }
 

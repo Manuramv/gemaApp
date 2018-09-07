@@ -13,10 +13,14 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import gemalto.com.gemaltodatalib.networking.response.genderquery.UserResult;
 import gemalto.com.gemaltouser.R;
 
 /**
@@ -121,5 +125,22 @@ public class CommonUtilities {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+
+    public static JSONObject generateJsonObj(UserResult list) {
+        JSONObject obj = new JSONObject();
+        try {
+            obj.put("id", list.getId().getValue());
+            obj.put("name", list.getName().getFirst()+" "+ list.getName().getLast());
+            obj.put("gender", list.getGender().toString());
+            obj.put("age", list.getDob().getAge().toString());
+            obj.put("dob", list.getDob().getDate().toString());
+            obj.put("email", list.getEmail().toString());
+        } catch (JSONException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        return obj;
     }
 }
