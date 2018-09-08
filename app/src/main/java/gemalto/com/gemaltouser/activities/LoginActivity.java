@@ -6,6 +6,7 @@ import android.app.DialogFragment;
 import android.app.FragmentManager;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.hardware.fingerprint.FingerprintManager;
 import android.os.Build;
 import android.os.CancellationSignal;
@@ -18,6 +19,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.TextView;
 
 import java.io.IOException;
 import java.security.GeneralSecurityException;
@@ -49,6 +51,7 @@ public class LoginActivity extends AppCompatActivity {
     private Cipher cipher;
     private KeyStore keyStore;
     private FingerprintManager.CryptoObject cryptoObject;
+    TextView fingerprintStatus;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -93,6 +96,7 @@ public class LoginActivity extends AppCompatActivity {
                                  Bundle savedInstance) {
             View v = inflater.inflate(R.layout.activity_fingerprint_challenge, viewGroup, false);
             cancelButton = (Button) v.findViewById(R.id.cancel_button);
+            fingerprintStatus = (TextView) v.findViewById(R.id.fingerprint_status);
             cancelButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -106,7 +110,7 @@ public class LoginActivity extends AppCompatActivity {
         @Override
         public void onResume() {
             super.onResume();
-            fingerprintHandler.startAuthentication("Gemaltouser");
+            fingerprintHandler.startAuthentication("Gemaltouser",fingerprintStatus);
         }
 
         @Override
@@ -138,7 +142,7 @@ public class LoginActivity extends AppCompatActivity {
             //We are not supporting any functionality for method as of now.
         }
 
-        public void startAuthentication(String keyName) {
+        public void startAuthentication(String keyName, TextView fingerprintStatus) {
             try {
                 FingerprintManager fingerprintManager = (FingerprintManager) context.getSystemService(Context.FINGERPRINT_SERVICE);
 
@@ -170,7 +174,8 @@ public class LoginActivity extends AppCompatActivity {
 
         @Override
         public void onAuthenticationFailed() {
-
+            fingerprintStatus.setText("Failed to authenticate.");
+            fingerprintStatus.setTextColor(Color.RED);
         }
 
         /*public void onClickCancelDialog(View v){
