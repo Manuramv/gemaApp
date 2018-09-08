@@ -1,8 +1,11 @@
 package gemalto.com.gemaltouser.util;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.app.KeyguardManager;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.hardware.fingerprint.FingerprintManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.support.v7.app.AlertDialog;
@@ -142,5 +145,40 @@ public class CommonUtilities {
             e.printStackTrace();
         }
         return obj;
+    }
+
+
+    @SuppressLint("NewApi")
+    public static boolean isFingerPrintAvailableInTheDevice(AppCompatActivity mActivity) {
+        boolean showFingerprintPopup = false;
+        KeyguardManager keyguardManager;
+        FingerprintManager fingerprintManager;
+        try {
+            keyguardManager = mActivity.getSystemService(KeyguardManager.class);
+            fingerprintManager = mActivity.getSystemService(FingerprintManager.class);
+            if (!(keyguardManager.isKeyguardSecure())) {
+                //Show a message that the user hasn't set up a fingerprint or lock screen.
+                showFingerprintPopup = false;
+                return showFingerprintPopup;
+            }
+            // Now the protection level of USE_FINGERPRINT permission is normal instead of dangerous.
+            // See http://developer.android.com/reference/android/Manifest.permission.html#USE_FINGERPRINT
+            // The line below prevents the false positive inspection from Android Studio
+            // noinspection ResourceType
+            if (!(fingerprintManager.hasEnrolledFingerprints())) {
+                //This happens when no fingerprints are registered.
+                showFingerprintPopup = false;
+                return showFingerprintPopup;
+            }
+            /*keyguardManager=null;
+            fingerprintManager=null;
+            defaultCipher=null;
+            mKeyStore=null;
+            mKeyGenerator=null;*/
+            showFingerprintPopup = true;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return showFingerprintPopup;
     }
 }
