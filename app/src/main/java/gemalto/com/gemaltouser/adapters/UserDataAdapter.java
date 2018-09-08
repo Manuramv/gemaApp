@@ -18,6 +18,7 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
+import gemalto.com.gemaltodatalib.networking.response.genderquery.GetGenderQueryInfoResponse;
 import gemalto.com.gemaltodatalib.networking.response.genderquery.UserResult;
 import gemalto.com.gemaltouser.R;
 import gemalto.com.gemaltouser.activities.UserDetailsActivity;
@@ -33,9 +34,9 @@ public class UserDataAdapter extends RecyclerView.Adapter<UserDataAdapter.ViewHo
     AppCompatActivity mAppCompatActivity;
     ArrayList<UserResult> dataList;
 
-    public UserDataAdapter(AppCompatActivity mAppCompatActivity, ArrayList<UserResult> list) {
+    public UserDataAdapter(AppCompatActivity mAppCompatActivity, GetGenderQueryInfoResponse list) {
         this.mAppCompatActivity = mAppCompatActivity;
-        this.dataList = list;
+        this.dataList = list.getResults();
     }
 
     @NonNull

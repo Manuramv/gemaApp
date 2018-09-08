@@ -213,9 +213,9 @@ public class QueryFragment extends CustomBaseFragments implements AdapterView.On
     }
 
     @Override
-    public void onReceivingMultipleUserDataFromlib(ArrayList<UserResult> list) {
+    public void onReceivingMultipleUserDataFromlib(GetGenderQueryInfoResponse list) {
         commonUtilities.removeBusyIndicator(mActivityObj);
-        Log.d("TAG","Multiple user call back in fragment::"+list.size());
+        Log.d("TAG","Multiple user call back in fragment::"+list.getInfo().getSeed());
         Intent intent = new Intent(mActivityObj, UserDetailListActivity.class);
         //intent.putSerializableExtra("songs", songs);
         // Bundle bundle = new Bundle();
@@ -275,7 +275,6 @@ public class QueryFragment extends CustomBaseFragments implements AdapterView.On
         intent.putExtra("comingfrom",entryPoint);
         startActivity(intent);
     }
-
 
 
 
