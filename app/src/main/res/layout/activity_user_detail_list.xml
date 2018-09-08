@@ -13,12 +13,16 @@
     <android.support.v7.widget.RecyclerView
         android:id="@+id/rv_userlist"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:paddingTop="8dp"
         android:paddingLeft="8dp"
         android:paddingRight="8dp"
         android:background="#F7F7F7"/>
 
-
+<Button
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:text="test"
+    android:id="@+id/dbtest"/>
 
 </LinearLayout>

@@ -65,4 +65,10 @@ public class UserDetailsActivity extends CustomBaseActivity {
         }
         return super.onOptionsItemSelected(item);
     }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        finish();
+    }
 }

@@ -23,7 +23,7 @@ import gemalto.com.gemaltouser.util.GemAppConstants;
 public class CustomBaseActivity extends AppCompatActivity implements IdleTimeOutService {
     Handler handlerObjRef;
     static AppCompatActivity appComptActivityRef=null;
-    private long DISCONNECT_TIMEOUT= 12000;
+    private long DISCONNECT_TIMEOUT= 120000;
     private boolean isActivityVisible=false;
     public static long startTime = 0;
     public static long endTime = 0;
@@ -110,7 +110,7 @@ public class CustomBaseActivity extends AppCompatActivity implements IdleTimeOut
                 @Override
                 public void onClick(View v) {
                     try {
-                        CommonUtilities.showBusyIndicator(mActivityObj);
+                        //CommonUtilities.showBusyIndicator(mActivityObj);
                         endTimer();
                         cancelSession(mActivityObj);
                         alertDialog.dismiss();

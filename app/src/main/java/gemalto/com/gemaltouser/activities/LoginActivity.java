@@ -41,6 +41,7 @@ import javax.crypto.SecretKey;
 
 import gemalto.com.gemaltouser.R;
 import gemalto.com.gemaltouser.util.CommonUtilities;
+import gemalto.com.gemaltouser.util.GemAppConstants;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -167,6 +168,7 @@ public class LoginActivity extends AppCompatActivity {
             fingerprintRequestDialogFragment.dismiss();
             Intent intent = new Intent(mActivity,MainActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            GemAppConstants.isUserLoggedin = true;
             startActivity(intent);
 
 

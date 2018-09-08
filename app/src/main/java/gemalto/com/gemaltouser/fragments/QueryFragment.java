@@ -30,6 +30,7 @@ import gemalto.com.gemaltodatalib.callbackinterface.PassUserIdInterface;
 import gemalto.com.gemaltodatalib.dataprocessing.RetrieveData;
 import gemalto.com.gemaltodatalib.dataprocessing.RetrieveMultipleUserData;
 import gemalto.com.gemaltodatalib.dataprocessing.RetrieveUserIdData;
+import gemalto.com.gemaltodatalib.networking.response.genderquery.GetGenderQueryInfoResponse;
 import gemalto.com.gemaltodatalib.networking.response.genderquery.UserResult;
 import gemalto.com.gemaltodatalib.serviceimpl.PassGenderDataInterface;
 import gemalto.com.gemaltouser.R;
@@ -172,41 +173,83 @@ public class QueryFragment extends CustomBaseFragments implements AdapterView.On
     }
 
     private void proceedWithDataQuery() {
-        if(GemAppConstants.isGenderSelected){
-            RetrieveData retrieveDataObj = new RetrieveData(mActivityObj);
-            retrieveDataObj.initiateGenderQuery(selectedGender,passGenderDataInterfaceObj);
-            commonUtilities.showBusyIndicator(mActivityObj);
-        } else if(GemAppConstants.isUserIDSelected){
+         {
+            if (GemAppConstants.isGenderSelected) {
+                RetrieveData retrieveDataObj = new RetrieveData(mActivityObj);
+                retrieveDataObj.initiateGenderQuery(selectedGender.toLowerCase(), passGenderDataInterfaceObj);
+                commonUtilities.showBusyIndicator(mActivityObj);
+            } else if (GemAppConstants.isUserIDSelected) {
 
-            RetrieveUserIdData retrieveUserIdDataObj = new RetrieveUserIdData(mActivityObj);
-            retrieveUserIdDataObj.initiateUserIDQuery(etSeed.getText().toString(),passUserIDInterfaceObj);
-            commonUtilities.showBusyIndicator(mActivityObj);
-        } else {
-            RetrieveMultipleUserData retrieveMultipleUserDataObj = new RetrieveMultipleUserData(mActivityObj);
-            retrieveMultipleUserDataObj.initiateMultipleUserQuery(etMultiplUser.getText().toString(),passMultipleUserIdInterfaceObj);
-            commonUtilities.showBusyIndicator(mActivityObj);
-        }
-
+                RetrieveUserIdData retrieveUserIdDataObj = new RetrieveUserIdData(mActivityObj);
+                retrieveUserIdDataObj.initiateUserIDQuery(etSeed.getText().toString().toLowerCase(), passUserIDInterfaceObj);
+                commonUtilities.showBusyIndicator(mActivityObj);
+            } else {
+                RetrieveMultipleUserData retrieveMultipleUserDataObj = new RetrieveMultipleUserData(mActivityObj);
+                retrieveMultipleUserDataObj.initiateMultipleUserQuery(etMultiplUser.getText().toString(), passMultipleUserIdInterfaceObj);
+                commonUtilities.showBusyIndicator(mActivityObj);
+            }
+        } /*catch (Exception e){
+            Log.d("Tag","Exception happened"+e);
+        }*/
     }
 
     @Override
-    public void onReceivingDataFromlib(List<UserResult> list) {
-        Log.d("tag","on receiving data from lib in query fragment=========:"+list.get(0).getPhone());
+    public void onReceivingDataFromlib(GetGenderQueryInfoResponse list) {
+        Log.d("tag","on receiving data from lib in query fragment=========:"+list.getResults(). get(0).getPhone());
         commonUtilities.removeBusyIndicator(mActivityObj);
         //navigateToFragment(userDetailsFragment, true);
-         JSONObject obj = generateJsonObj(list);
+         JSONObject obj = generateJsonObjToDisplay(list);
         navigateToUserDetail(obj, "comingFromGender");
+    }
+
+
+    @Override
+    public void onReceivingUserIdDataFromlib(GetGenderQueryInfoResponse list) {
+        commonUtilities.removeBusyIndicator(mActivityObj);
+        Log.d("tag","on receiving data from lib in query fragment=========:"+list.getResults(). get(0).getPhone());
+        JSONObject obj = generateJsonObjToDisplay(list);
+
+        navigateToUserDetail(obj,"comingFromSeedId");
+    }
+
+    @Override
+    public void onReceivingMultipleUserDataFromlib(ArrayList<UserResult> list) {
+        commonUtilities.removeBusyIndicator(mActivityObj);
+        Log.d("TAG","Multiple user call back in fragment::"+list.size());
+        Intent intent = new Intent(mActivityObj, UserDetailListActivity.class);
+        //intent.putSerializableExtra("songs", songs);
+        // Bundle bundle = new Bundle();
+        intent.putExtra("COMINGFROM","query user");
+        intent.putExtra("myArrayListKey",  list);
+        //intent.putExtra("myBundle", bundle);
+        startActivity(intent);
     }
 
     private JSONObject generateJsonObj(List<UserResult> list) {
         JSONObject obj = new JSONObject();
         try {
-            obj.put("id", list.get(0).getId().getValue());
+            //obj.put("id", list.get(0).getValue());
             obj.put("name", list.get(0).getName().getFirst()+" "+ list.get(0).getName().getLast());
             obj.put("gender", list.get(0).getGender().toString());
             obj.put("age", list.get(0).getDob().getAge().toString());
             obj.put("dob", list.get(0).getDob().getDate().toString());
             obj.put("email", list.get(0).getEmail().toString());
+        } catch (JSONException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        return obj;
+    }
+
+    private JSONObject generateJsonObjToDisplay(GetGenderQueryInfoResponse list) {
+        JSONObject obj = new JSONObject();
+        try {
+            obj.put("id", list.getInfo().getSeed());
+            obj.put("name", list.getResults().get(0).getName().getFirst()+" "+ list.getResults().get(0).getName().getLast());
+            obj.put("gender", list.getResults().get(0).getGender().toString());
+            obj.put("age", list.getResults().get(0).getDob().getAge().toString());
+            obj.put("dob", list.getResults().get(0).getDob().getDate().toString());
+            obj.put("email", list.getResults().get(0).getEmail().toString());
         } catch (JSONException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
@@ -226,31 +269,14 @@ public class QueryFragment extends CustomBaseFragments implements AdapterView.On
         ft.commit();
     }
 
-    public void navigateToUserDetail(JSONObject obj, String comingFromSeed){
+    public void navigateToUserDetail(JSONObject obj, String entryPoint){
         Intent intent = new Intent(mActivityObj, UserDetailsActivity.class);
         intent.putExtra("userdata",obj.toString());
-        intent.putExtra("comingfrom",comingFromSeed);
+        intent.putExtra("comingfrom",entryPoint);
         startActivity(intent);
     }
 
 
-    @Override
-    public void onReceivingUserIdDataFromlib(List<UserResult> list) {
-        commonUtilities.removeBusyIndicator(mActivityObj);
-        Log.d("TAG","Userid call back in fragment::"+list.get(0).getPhone());
-        JSONObject obj = generateJsonObj(list);
-        navigateToUserDetail(obj,"comingFromSeed");
-    }
 
-    @Override
-    public void onReceivingMultipleUserDataFromlib(ArrayList<UserResult> list) {
-        commonUtilities.removeBusyIndicator(mActivityObj);
-        Log.d("TAG","Multiple user call back in fragment::"+list.size());
-        Intent intent = new Intent(mActivityObj, UserDetailListActivity.class);
-        //intent.putSerializableExtra("songs", songs);
-       // Bundle bundle = new Bundle();
-        intent.putExtra("myArrayListKey",  list);
-        //intent.putExtra("myBundle", bundle);
-        startActivity(intent);
-    }
+
 }

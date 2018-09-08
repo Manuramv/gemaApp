@@ -81,7 +81,10 @@ public class MainActivity extends CustomBaseActivity  implements NavigationView.
             navigateToFragment(queryFragment,false);
 
         } else if (id == R.id.nav_view_stored_user) {
-            navigateToFragment(storedUserFragment,false);
+            //navigateToFragment(storedUserFragment,false);
+            Intent intent = new Intent(this,UserDetailListActivity.class);
+            intent.putExtra("COMINGFROM","view stored user");
+            startActivity(intent);
         } else if (id == R.id.nav_exit) {
             //System.exit(0);
             android.os.Process.killProcess(android.os.Process.myPid());
