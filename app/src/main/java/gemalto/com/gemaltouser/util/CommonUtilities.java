@@ -23,6 +23,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import gemalto.com.gemaltodatalib.networking.response.genderquery.GetGenderQueryInfoResponse;
 import gemalto.com.gemaltodatalib.networking.response.genderquery.UserResult;
 import gemalto.com.gemaltouser.R;
 
@@ -118,6 +119,7 @@ public class CommonUtilities {
                     try {
                         if (plainProgressIndicator != null && plainProgressIndicator.isShowing()) {
                             plainProgressIndicator.dismiss();
+                            plainProgressIndicator = null;
                         }
                     } catch (Exception e) {
                         e.printStackTrace();
@@ -131,8 +133,8 @@ public class CommonUtilities {
     }
 
 
-    public static JSONObject generateJsonObj(UserResult list) {
-        JSONObject obj = new JSONObject();
+    public static JSONObject generateJsonObj(GetGenderQueryInfoResponse list,int position) {
+       /* JSONObject obj = new JSONObject();
         try {
             obj.put("id", list.getId().getValue());
             obj.put("name", list.getName().getFirst()+" "+ list.getName().getLast());
@@ -140,6 +142,25 @@ public class CommonUtilities {
             obj.put("age", list.getDob().getAge().toString());
             obj.put("dob", list.getDob().getDate().toString());
             obj.put("email", list.getEmail().toString());
+        } catch (JSONException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        return obj;*/
+
+        JSONObject obj = new JSONObject();
+        try {
+            if(list.getInfo()!=null){
+                obj.put("id", list.getInfo().getSeed());
+            } else {
+                obj.put("id", " ");
+            }
+
+            obj.put("name", list.getResults().get(position).getName().getFirst()+" "+ list.getResults().get(0).getName().getLast());
+            obj.put("gender", list.getResults().get(position).getGender().toString());
+            obj.put("age", list.getResults().get(position).getDob().getAge().toString());
+            obj.put("dob", list.getResults().get(position).getDob().getDate().toString());
+            obj.put("email", list.getResults().get(position).getEmail().toString());
         } catch (JSONException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();

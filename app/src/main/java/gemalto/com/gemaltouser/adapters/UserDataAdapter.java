@@ -31,12 +31,14 @@ import static gemalto.com.gemaltouser.util.CommonUtilities.generateJsonObj;
 
 public class UserDataAdapter extends RecyclerView.Adapter<UserDataAdapter.ViewHolder> {
 
+    private final GetGenderQueryInfoResponse responseObj;
     AppCompatActivity mAppCompatActivity;
     ArrayList<UserResult> dataList;
 
     public UserDataAdapter(AppCompatActivity mAppCompatActivity, GetGenderQueryInfoResponse list) {
         this.mAppCompatActivity = mAppCompatActivity;
         this.dataList = list.getResults();
+        this.responseObj = list;
     }
 
     @NonNull
@@ -61,11 +63,12 @@ public class UserDataAdapter extends RecyclerView.Adapter<UserDataAdapter.ViewHo
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                showDetailPage(dataList.get(position));
+                showDetailPage(responseObj,position);
             }
         });
 
     }
+
 
 
 
@@ -89,9 +92,9 @@ public class UserDataAdapter extends RecyclerView.Adapter<UserDataAdapter.ViewHo
 
     }
 
-    private void showDetailPage(UserResult userResult) {
+    private void showDetailPage(GetGenderQueryInfoResponse dataList, int position) {
         //navigateToFragment(userDetailsFragment, true);
-        JSONObject obj = generateJsonObj(userResult);
+        JSONObject obj = generateJsonObj(dataList,position);
         Intent intent = new Intent(mAppCompatActivity, UserDetailsActivity.class);
         intent.putExtra("userdata",obj.toString());
         intent.putExtra("comingfrom","fromuserList");
