@@ -12,7 +12,13 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import gemalto.com.gemaltouser.R;
+import gemalto.com.gemaltouser.util.CommonUtilities;
 
+
+/**
+ * @class UserDetailsActivity This activity show the specific user details.
+ *
+ */
 public class UserDetailsActivity extends CustomBaseActivity {
 
     private JSONObject json_object;
@@ -69,6 +75,7 @@ public class UserDetailsActivity extends CustomBaseActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        CommonUtilities.removeBusyIndicator(this);
         finish();
     }
 }

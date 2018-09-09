@@ -18,6 +18,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -124,11 +125,6 @@ public class QueryFragment extends CustomBaseFragments implements AdapterView.On
 
     @Override
     public void onItemSelected(AdapterView<?> adapterView, View view, int position, long l) {
-      /*  selectedGender = paths[position];
-        etSeed.setText("");
-        etMultiplUser.setText("");*/
-       // etMultiplUser.setText("");
-
         selectedGender = paths[position];
         GemAppConstants.isGenderSelected = true;
         GemAppConstants.isUserIDSelected = false;
@@ -136,24 +132,7 @@ public class QueryFragment extends CustomBaseFragments implements AdapterView.On
 
         Log.d("tag","Selected item::"+selectedGender);
 
-
-       /* switch (position){
-            case 1:
-                selectedGender = "female";
-                etSeed.setText("");
-                etMultiplUser.setText("");
-                break;
-
-            case 2:
-                selectedGender = "male";
-                etSeed.setText("");
-                etMultiplUser.setText("");
-                break;
-
-
-        }*/
-
-    }
+        }
 
     @Override
     public void onNothingSelected(AdapterView<?> adapterView) {
@@ -171,9 +150,12 @@ public class QueryFragment extends CustomBaseFragments implements AdapterView.On
                  break;
         }
     }
-
+    /**
+     * This method triggers when user clicking the query button, it will call the correct API of the library based on the user query criteria.
+     * There are 3 different APIs for gender,seed/user and multiple user to fetch data from library.
+     */
     private void proceedWithDataQuery() {
-         {
+         try{
             if (GemAppConstants.isGenderSelected) {
                 RetrieveData retrieveDataObj = new RetrieveData(mActivityObj);
                 retrieveDataObj.initiateGenderQuery(selectedGender.toLowerCase(), passGenderDataInterfaceObj);
@@ -188,21 +170,29 @@ public class QueryFragment extends CustomBaseFragments implements AdapterView.On
                 retrieveMultipleUserDataObj.initiateMultipleUserQuery(etMultiplUser.getText().toString(), passMultipleUserIdInterfaceObj);
                 commonUtilities.showBusyIndicator(mActivityObj);
             }
-        } /*catch (Exception e){
-            Log.d("Tag","Exception happened"+e);
-        }*/
+        } catch (Exception e){
+             Toast toast=Toast.makeText(mActivityObj,"Something went wrong could be no matching data, please try again later",Toast.LENGTH_SHORT);
+             toast.show();
+        }
     }
 
+    /**
+     * This method returns the data from the library if the user is selected gender option
+     * @param list this parameter contains the data based on the Gender query.
+     */
     @Override
     public void onReceivingDataFromlib(GetGenderQueryInfoResponse list) {
-        Log.d("tag","on receiving data from lib in query fragment=========:"+list.getResults(). get(0).getPhone());
         commonUtilities.removeBusyIndicator(mActivityObj);
+        Log.d("tag","on receiving data from lib in query fragment=========:"+list.getResults(). get(0).getPhone());
         //navigateToFragment(userDetailsFragment, true);
          JSONObject obj = generateJsonObjToDisplay(list);
         navigateToUserDetail(obj, "comingFromGender");
     }
 
-
+    /**
+     * This method returns the data from the library if the user is selected userid/seed option
+     * @param list this parameter contains the data based on the UserId/seed query.
+     */
     @Override
     public void onReceivingUserIdDataFromlib(GetGenderQueryInfoResponse list) {
         commonUtilities.removeBusyIndicator(mActivityObj);
@@ -212,6 +202,10 @@ public class QueryFragment extends CustomBaseFragments implements AdapterView.On
         navigateToUserDetail(obj,"comingFromSeedId");
     }
 
+    /**
+     * This method returns the data from the library if the user is selected multiple user count option
+     * @param list this parameter contains the data based on the Multiple user query.
+     */
     @Override
     public void onReceivingMultipleUserDataFromlib(GetGenderQueryInfoResponse list) {
         commonUtilities.removeBusyIndicator(mActivityObj);
@@ -225,22 +219,10 @@ public class QueryFragment extends CustomBaseFragments implements AdapterView.On
         startActivity(intent);
     }
 
-    private JSONObject generateJsonObj(List<UserResult> list) {
-        JSONObject obj = new JSONObject();
-        try {
-            //obj.put("id", list.get(0).getValue());
-            obj.put("name", list.get(0).getName().getFirst()+" "+ list.get(0).getName().getLast());
-            obj.put("gender", list.get(0).getGender().toString());
-            obj.put("age", list.get(0).getDob().getAge().toString());
-            obj.put("dob", list.get(0).getDob().getDate().toString());
-            obj.put("email", list.get(0).getEmail().toString());
-        } catch (JSONException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-        return obj;
-    }
-
+    /**
+     * This method parse the response whatever receiving from the Library and parse it into the json and returns to show in UI.
+     * @param list Data to convert in to json for the ease of use.
+     */
     private JSONObject generateJsonObjToDisplay(GetGenderQueryInfoResponse list) {
         JSONObject obj = new JSONObject();
         try {
@@ -258,17 +240,12 @@ public class QueryFragment extends CustomBaseFragments implements AdapterView.On
     }
 
 
-    public void navigateToFragment(android.support.v4.app.Fragment frag, boolean addtostack) {
 
-        FragmentTransaction ft = mActivityObj.getSupportFragmentManager().beginTransaction();
-        ft.replace(R.id.fragmentcontainer, frag); // f1_container is your FrameLayout container
-        ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
-        if (addtostack) {
-            ft.addToBackStack(null);
-        }
-        ft.commit();
-    }
-
+    /**
+     * This method takes the user to the next screen to show the deatils of user.
+     * @param obj Json object to show the data in the screen.
+     *  @param entryPoint Parameter tells the next screen from which method I am coming from.
+     */
     public void navigateToUserDetail(JSONObject obj, String entryPoint){
         Intent intent = new Intent(mActivityObj, UserDetailsActivity.class);
         intent.putExtra("userdata",obj.toString());

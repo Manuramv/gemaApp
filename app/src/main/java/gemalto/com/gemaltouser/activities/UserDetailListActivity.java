@@ -16,6 +16,11 @@ import gemalto.com.gemaltouser.adapters.UserDataAdapter;
 import gemalto.com.gemaltouser.util.CommonUtilities;
 import gemalto.com.gemaltouser.util.SimpleDividerItemDecoration;
 
+
+/**
+ * @class UserDetailListActivity This activity show the list of users details.
+ *
+ */
 public class UserDetailListActivity extends CustomBaseActivity implements PassMultipleUserIdInterface {
 
     RecyclerView mRecyclerView;
@@ -61,12 +66,19 @@ public class UserDetailListActivity extends CustomBaseActivity implements PassMu
 
     }
 
+    /**
+     * This method set the data into adapter so user can view it in a list view.
+     * @param list this parameter is the list of users.
+     */
     private void showlistVIew(GetGenderQueryInfoResponse list) {
         userDataAdapterObj = new UserDataAdapter(this, list);
         mRecyclerView.setAdapter(userDataAdapterObj);
         mRecyclerView.addItemDecoration(new SimpleDividerItemDecoration(this));
     }
 
+    /**
+     *This method fetch data from local db, which will pass parameter "ALL" to the library so that library read data from local db and send back
+     */
     private void fetchDataFromDb() {
         RetrieveMultipleUserData retrieveMultipleUserDataObj = new RetrieveMultipleUserData(mActivityObj);
         retrieveMultipleUserDataObj.initiateMultipleUserQuery("ALL",passMultipleUserIdInterfaceObj);
@@ -74,7 +86,10 @@ public class UserDetailListActivity extends CustomBaseActivity implements PassMu
     }
 
 
-
+    /**
+     * This method contains the callback response of all the users/employees from database.
+     * @param getGenderQueryInfoResponse this parameter contains the response of employees from db.
+     */
     @Override
     public void onReceivingMultipleUserDataFromlib(GetGenderQueryInfoResponse getGenderQueryInfoResponse) {
        // commonUtilities.removeBusyIndicator(mActivityObj);

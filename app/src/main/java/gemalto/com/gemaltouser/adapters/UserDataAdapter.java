@@ -92,6 +92,11 @@ public class UserDataAdapter extends RecyclerView.Adapter<UserDataAdapter.ViewHo
 
     }
 
+    /**
+     * This method takes the user to the detail screen.
+     * @param dataList list of data
+     *  @param  position Item position which is selected by the user from the list.
+     */
     private void showDetailPage(GetGenderQueryInfoResponse dataList, int position) {
         //navigateToFragment(userDetailsFragment, true);
         JSONObject obj = generateJsonObj(dataList,position);

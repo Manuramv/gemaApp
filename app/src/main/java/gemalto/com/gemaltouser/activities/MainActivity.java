@@ -28,7 +28,10 @@ import gemalto.com.gemaltouser.R;
 import gemalto.com.gemaltouser.fragments.QueryFragment;
 import gemalto.com.gemaltouser.fragments.SettingsFragment;
 import gemalto.com.gemaltouser.fragments.StoredUserFragment;
-
+/**
+ * This class {@link MainActivity} contains main logic.Navigaton drawer,fragments switching and all.
+ * This class extends the {@link CustomBaseActivity} to get the global features of the application.
+ */
 public class MainActivity extends CustomBaseActivity  implements NavigationView.OnNavigationItemSelectedListener {
     AppCompatActivity mActivityObj;
     private QueryFragment queryFragment;
@@ -57,6 +60,9 @@ public class MainActivity extends CustomBaseActivity  implements NavigationView.
         navigationView.setNavigationItemSelectedListener(this);
     }
 
+    /**
+     * Ondevice backclick this methoid execute.
+     */
     @Override
     public void onBackPressed() {
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -67,6 +73,10 @@ public class MainActivity extends CustomBaseActivity  implements NavigationView.
         }
     }
 
+    /**
+     * This method takes the user to particular screen based on user selection.
+     * @param item Selected item from the navigation drawer.
+     */
 
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
@@ -96,7 +106,11 @@ public class MainActivity extends CustomBaseActivity  implements NavigationView.
         return true;
     }
 
-
+    /**
+     * This method helps to replace the fragment.
+     * @param frag Name of the fragment to replace.
+     * @param addtostack Parameter to check whether needs to keep in stack or not.
+     */
     public void navigateToFragment(Fragment frag, boolean addtostack) {
 
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();

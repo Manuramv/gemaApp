@@ -38,7 +38,11 @@ public class CustomBaseActivity extends AppCompatActivity implements IdleTimeOut
 
             startTimer();
     }
-
+    /**
+     * This is a global method to set the toolbar for each activity.
+     * @param title This is the header text.
+     * @param resourceId This is the home/left icon.
+     */
     public void setAppToolbar(String title, int resourceId) {
         Toolbar actionBarToolbar = (Toolbar) findViewById(R.id.tool_bar);
         actionBarToolbar.setNavigationIcon(R.drawable.ic_back_arrow);
@@ -53,7 +57,9 @@ public class CustomBaseActivity extends AppCompatActivity implements IdleTimeOut
 
     }
 
-
+    /**
+     * This method will invoke the timer once if the user is logged in so we can alert user if he is in inactive mode for a while.Kind of security of the applicaiton.
+     */
     public  void startTimer() {
         //Idle timeOut - Start 3
         Log.d("TAG","start timer called");
@@ -71,7 +77,10 @@ public class CustomBaseActivity extends AppCompatActivity implements IdleTimeOut
 
 
 
-    //Idle timeOut - Start
+    /**
+     * This method show the alert message to the user during idle timeout event.
+     * @param mActivityObj Context of the application/activity.
+     */
     public  void showIdleTimeOutNotification(final AppCompatActivity mActivityObj) {
         AlertDialog.Builder alertDialogBuilder = null;
         LayoutInflater inflaterObjRef = null;
@@ -129,13 +138,17 @@ Log.d("TAG","exception in showing timer:");
         }
     }
     //Idle timeOut - End 3
-
+    /**
+     * This method remove the timer callbacks.
+     */
     public  void endTimer() {
         Log.d("TAG","end timer called");
         handlerObjRef.removeCallbacks(runnableObjRef);
         handlerObjRef.removeCallbacksAndMessages(null);
     }
-
+    /**
+     * This function reset the handle on the events of user interaction on the screen.
+     */
     public  void resetHandler() {
         try {
             startTime = System.currentTimeMillis();
@@ -165,6 +178,10 @@ Log.d("TAG","exception in showing timer:");
         }
     };
 
+    /**
+     * This method take the user again to the login page in the events of timeout/logout click
+     * @param mActivityObj Context of the application/activity.
+     */
     @Override
     public  void cancelSession(AppCompatActivity mActivityObj) {
         //do the logout logic
